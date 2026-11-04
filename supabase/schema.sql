@@ -155,12 +155,3 @@ create policy "avatars: leitura pública" on storage.objects
 alter function public.protege_campos_perfil() set search_path = public;
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
 revoke execute on function public.protege_campos_perfil() from public, anon, authenticated;
-
--- =========================================================
--- 6. Leitura aprofundada (IA) — gravada só pela Edge Function 'leitura'
--- =========================================================
-alter table public.tiragens
-  add column if not exists leitura_ia text,
-  add column if not exists leitura_ia_em timestamptz,
-  add column if not exists leitura_ia_crise boolean not null default false;
-create index if not exists tiragens_leitura_ia_idx on public.tiragens (user_id, leitura_ia_em);

@@ -214,10 +214,8 @@ function vTarot(v){
         <div><span class="eyebrow">O que a carta diz</span><p>${m[0]}</p></div>
         <div><span class="eyebrow">Como vai ser</span><p>${inv?m[2]:m[1]}</p></div>
         <blockquote class="conforto"><span class="eyebrow">Mensagem para você</span><p>${m[3]}</p><p class="bencao">${I.star} ${bencao}</p></blockquote>
-        <section class="aprof" id="aprof"></section>
         <button class="btn ghost" type="button" id="nova">Fazer nova pergunta</button>
       </div>`;
-    renderAprof(t);
     if (animar) requestAnimationFrame(()=>setTimeout(()=>document.getElementById("card").classList.add("flipped"),120));
     document.getElementById("nova").onclick = () => { res.hidden=true; document.getElementById("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); };
     res.scrollIntoView({ behavior:"smooth", block:"start" });
@@ -235,33 +233,6 @@ function vTarot(v){
     tiragens.unshift(data);
     mostrar(data, true);
     document.getElementById("q").value=""; hist();
-  };
-}
-
-
-/* Leitura aprofundada (IA) */
-function paragrafos(txt){ return txt.split(/\n\s*\n/).map(p=>`<p>${esc(p.trim()).replace(/\n/g,"<br>")}</p>`).join(""); }
-function renderAprof(t){
-  const box=document.getElementById("aprof"); if(!box) return;
-  if (t.leitura_ia){
-    box.innerHTML = t.leitura_ia_crise
-      ? `<div class="leitura crise"><span class="eyebrow">Um momento para você</span>${paragrafos(t.leitura_ia)}<p class="contato">CVV: <b>188</b> · cvv.org.br (24 horas, gratuito) · Emergência: <b>SAMU 192</b></p></div>`
-      : `<div class="leitura"><span class="eyebrow">Leitura aprofundada</span>${paragrafos(t.leitura_ia)}<p class="nota">Uma leitura para reflexão, não uma previsão.</p></div>`;
-    return;
-  }
-  box.innerHTML = `<div class="aprof-cta"><div><b>Quer ir mais fundo?</b><p class="muted">Uma leitura escrita para a sua pergunta, para refletir com calma.</p></div>
-    <button class="btn" type="button" id="aprof-btn">Aprofundar a leitura</button></div><p class="err" id="aprof-err" role="alert"></p>`;
-  document.getElementById("aprof-btn").onclick = async () => {
-    const btn=document.getElementById("aprof-btn"), err=document.getElementById("aprof-err");
-    btn.disabled=true; btn.textContent="Escrevendo sua leitura…"; err.textContent="";
-    const { data, error } = await sb.functions.invoke("leitura", { body: { tiragem_id: t.id } });
-    if (error || !data || !data.leitura){
-      let msg="Não foi possível escrever sua leitura agora. Tente de novo em alguns minutos.";
-      try { const b = await error.context.json(); if (b && b.erro) msg=b.erro; } catch(_){}
-      btn.disabled=false; btn.textContent="Aprofundar a leitura"; err.textContent=msg; return;
-    }
-    t.leitura_ia=data.leitura; t.leitura_ia_crise=!!data.crise; t.leitura_ia_em=data.em;
-    renderAprof(t);
   };
 }
 
