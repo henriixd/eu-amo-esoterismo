@@ -200,8 +200,26 @@ function vTarot(v){
   <div class="panel soft reading" id="res" hidden></div>
   <div><div class="head" style="margin-bottom:12px"><h3>Suas tiragens</h3></div><div class="panel history" id="hist"></div></div>`;
   const hist = () => { document.getElementById("hist").innerHTML = tiragens.length
-    ? tiragens.map(t=>`<div class="row"><img class="thumb ${t.invertida?"rev":""}" src="${cartaImg(t.carta)}" alt="" loading="lazy" width="350" height="600"><div class="q"><time>${dataBR(t.created_at)}</time><p>${esc(t.pergunta)}</p></div><span class="pill">${ARCANOS[t.carta][1]}${t.invertida?" · invertida":""}</span></div>`).join("")
-    : `<p class="muted">Nenhuma tiragem ainda. Sua primeira pergunta aparecerá aqui.</p>`; };
+    ? tiragens.map((t,k)=>`<button type="button" class="row" data-k="${k}" aria-label="Ver a mensagem de ${ARCANOS[t.carta][1]}"><img class="thumb ${t.invertida?"rev":""}" src="${cartaImg(t.carta)}" alt="" loading="lazy" width="350" height="600"><div class="q"><time>${dataBR(t.created_at)}</time><p>${esc(t.pergunta)}</p></div><span class="pill">${ARCANOS[t.carta][1]}${t.invertida?" · invertida":""}</span></button>`).join("")
+    : `<p class="muted">Nenhuma tiragem ainda. Sua primeira pergunta aparecerá aqui.</p>`;
+    document.querySelectorAll("#hist .row").forEach(b=>b.onclick=()=>{ const t=tiragens[+b.dataset.k]; mostrar(t, false); }); };
+  const mostrar = (t, animar) => {
+    const i=t.carta, inv=t.invertida, a=ARCANOS[i], m=MENSAGENS[i], res=document.getElementById("res");
+    const bencao = BENCAOS[(String(t.id||"").length + i + (inv?3:0) + new Date(t.created_at).getDate()) % BENCAOS.length];
+    res.hidden=false;
+    res.innerHTML = `<div class="card-wrap"><div class="card ${animar?"":"flipped"}" id="card"><div class="face back">${AVATARS.estrela}</div>${cardFace(i,inv)}</div></div>
+      <div class="msg">
+        <div><span class="eyebrow">Sua pergunta</span><p class="pergunta">“${esc(t.pergunta)}”</p></div>
+        <div><h2>${a[1]}${inv?' <span class="pill">invertida</span>':""}</h2><p class="muted small">Arcano ${a[0]} · ${dataBR(t.created_at)}</p></div>
+        <div><span class="eyebrow">O que a carta diz</span><p>${m[0]}</p></div>
+        <div><span class="eyebrow">Como vai ser</span><p>${inv?m[2]:m[1]}</p></div>
+        <blockquote class="conforto"><span class="eyebrow">Mensagem para você</span><p>${m[3]}</p><p class="bencao">${I.star} ${bencao}</p></blockquote>
+        <button class="btn ghost" type="button" id="nova">Fazer nova pergunta</button>
+      </div>`;
+    if (animar) requestAnimationFrame(()=>setTimeout(()=>document.getElementById("card").classList.add("flipped"),120));
+    document.getElementById("nova").onclick = () => { res.hidden=true; document.getElementById("q").focus(); window.scrollTo({top:0,behavior:"smooth"}); };
+    res.scrollIntoView({ behavior:"smooth", block:"start" });
+  };
   hist();
   document.getElementById("f-q").onsubmit = async e => {
     e.preventDefault();
@@ -213,14 +231,7 @@ function vTarot(v){
     btn.disabled=false;
     if (error){ console.error(error); return err.textContent="Não foi possível registrar sua tiragem. Tente de novo."; }
     tiragens.unshift(data);
-    const a=ARCANOS[i], res=document.getElementById("res"); res.hidden=false;
-    res.innerHTML = `<div class="card-wrap"><div class="card" id="card"><div class="face back">${AVATARS.estrela}</div>${cardFace(i,inv)}</div></div>
-      <div style="display:flex;flex-direction:column;gap:12px;min-width:0"><span class="eyebrow">Sua pergunta</span><p style="font-style:italic">“${esc(q)}”</p>
-      <h2>${a[1]}${inv?' <span class="pill">invertida</span>':""}</h2><p>${inv?a[3]:a[2]}</p>
-      <p class="muted">Arcano ${a[0]}. A leitura é um convite à reflexão; a decisão é sempre sua.</p>
-      <button class="btn ghost" type="button" id="nova" style="align-self:flex-start">Fazer nova pergunta</button></div>`;
-    requestAnimationFrame(()=>setTimeout(()=>document.getElementById("card").classList.add("flipped"),120));
-    document.getElementById("nova").onclick = () => { document.getElementById("q").focus(); res.hidden=true; };
+    mostrar(data, true);
     document.getElementById("q").value=""; hist();
   };
 }
