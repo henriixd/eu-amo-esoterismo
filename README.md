@@ -14,6 +14,7 @@ Site estático (HTML, CSS e JavaScript puro) com **Supabase** para login, banco 
 | `app.js` | Telas e integração com o Supabase |
 | `config.js` | URL e chave pública do Supabase, links das redes sociais |
 | `cartas/` | Os 22 Arcanos Maiores do tarô Rider-Waite-Smith |
+| `supabase/functions/leitura/` | Função que escreve a leitura aprofundada com o Claude |
 | `supabase/schema.sql` | Tabelas, segurança (RLS) e bucket de fotos |
 
 ## Banco de dados
@@ -34,6 +35,14 @@ Cada cliente só acessa os próprios dados. Você vê todos os cadastros no pain
 5. Publique a pasta em qualquer hospedagem estática (Vercel, Netlify, GitHub Pages).
 
 Para testar localmente: `npx serve .` e abra `http://localhost:3000`.
+
+## Leitura aprofundada (IA)
+
+O botão "Aprofundar a leitura" chama a Edge Function `leitura`, que usa o modelo `claude-sonnet-5-5` com o prompt em `supabase/functions/leitura/prompt.ts`. A leitura fica salva na tiragem (`leitura_ia`) e não é gerada de novo.
+
+- Limite: 5 leituras aprofundadas por cliente a cada 24 horas (`LIMITE_POR_DIA` em `index.ts`).
+- A chave da API fica só no servidor: cadastre `ANTHROPIC_API_KEY` em **Edge Functions → Secrets** no painel do Supabase.
+- Quando a pessoa demonstra sofrimento intenso, a leitura é trocada por acolhimento e contatos do CVV (188) e SAMU (192), e a tiragem fica marcada com `leitura_ia_crise`.
 
 ## Imagens das cartas
 

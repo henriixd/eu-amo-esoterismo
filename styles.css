@@ -188,3 +188,11 @@ dl.data dd{margin:0;min-width:0;overflow-wrap:anywhere}
 button.row{background:none;border:0;border-top:1px solid var(--line);width:100%;text-align:left;cursor:pointer;color:inherit;font:inherit;border-radius:0}
 button.row:first-child{border-top:0}
 button.row:hover .q p{color:var(--accent)}
+.aprof-cta{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;background:var(--bg)}
+.aprof-cta > div{min-width:0;flex:1 1 220px}
+.leitura{border-left:2px solid var(--gold);padding:4px 0 4px 20px;display:flex;flex-direction:column;gap:12px}
+.leitura p{font-size:1.04rem;line-height:1.75;max-width:62ch}
+.leitura p:last-of-type{font-style:italic}
+.leitura .nota,.leitura .contato{font-size:.82rem;color:var(--muted);font-style:normal}
+.leitura.crise{border-left-color:var(--accent);background:var(--accent-soft);border-radius:0 var(--r) var(--r) 0;padding:16px 20px}
+.leitura.crise .contato{color:var(--fg);font-style:normal}
