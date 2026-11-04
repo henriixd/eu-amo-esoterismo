@@ -148,3 +148,10 @@ create policy "avatars: trocar na própria pasta" on storage.objects
 drop policy if exists "avatars: leitura pública" on storage.objects;
 create policy "avatars: leitura pública" on storage.objects
   for select using (bucket_id = 'avatars');
+
+-- =========================================================
+-- 5. Ajustes de segurança (avisos do Security Advisor)
+-- =========================================================
+alter function public.protege_campos_perfil() set search_path = public;
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+revoke execute on function public.protege_campos_perfil() from public, anon, authenticated;
