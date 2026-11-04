@@ -13,6 +13,7 @@ Site estático (HTML, CSS e JavaScript puro) com **Supabase** para login, banco 
 | `data.js` | Arcanos, tabela cabalística, signos, previsões e cálculos |
 | `app.js` | Telas e integração com o Supabase |
 | `config.js` | URL e chave pública do Supabase, links das redes sociais |
+| `cartas/` | Os 22 Arcanos Maiores do tarô Rider-Waite-Smith |
 | `supabase/schema.sql` | Tabelas, segurança (RLS) e bucket de fotos |
 
 ## Banco de dados
@@ -33,6 +34,10 @@ Cada cliente só acessa os próprios dados. Você vê todos os cadastros no pain
 5. Publique a pasta em qualquer hospedagem estática (Vercel, Netlify, GitHub Pages).
 
 Para testar localmente: `npx serve .` e abra `http://localhost:3000`.
+
+## Imagens das cartas
+
+Ilustrações originais de Pamela Colman Smith para o tarô Rider-Waite-Smith (1909), em domínio público (publicação anterior a 1929 e autora falecida em 1951). Digitalizações obtidas do conjunto [tarot-json](https://github.com/metabismuth/tarot-json).
 
 ## Próximos passos
 

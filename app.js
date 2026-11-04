@@ -189,7 +189,10 @@ function renderApp(){
 }
 
 /* Tarô */
-function cardFace(i,inv){ const a=ARCANOS[i]; return `<div class="face front ${inv?"rev":""}"><span class="num">${a[0]}</span><span class="glyph"><svg width="90" height="90" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="16"/><path d="M24 4l3 14 14 6-14 3-3 14-3-14-14-3 14-6z"/></svg></span><span class="nm">${a[1]}</span></div>`; }
+const cartaImg = i => `cartas/arcano-${String(i).padStart(2,"0")}.jpg`;
+function cardFace(i,inv){ const a=ARCANOS[i]; return `<div class="face front img ${inv?"rev":""}"><img src="${cartaImg(i)}" alt="${a[1]}${inv?" (invertida)":""}" width="350" height="600"></div>`; }
+// pré-carrega as cartas para a virada não mostrar a imagem carregando
+window.addEventListener("load", () => setTimeout(() => ARCANOS.forEach((_,i) => { const im=new Image(); im.src=cartaImg(i); }), 1500));
 function vTarot(v){
   v.innerHTML = `<div class="head"><span class="eyebrow">Tarô · Arcanos Maiores</span><h2>Faça sua pergunta</h2><p class="muted">Concentre-se em uma única pergunta. Cada pergunta recebe uma carta.</p></div>
   <form class="panel" id="f-q"><div class="ask"><div class="field"><label for="q">Sua pergunta</label><input id="q" maxlength="160" placeholder="Ex.: O que devo saber sobre minha carreira nos próximos meses?"></div>
@@ -197,7 +200,7 @@ function vTarot(v){
   <div class="panel soft reading" id="res" hidden></div>
   <div><div class="head" style="margin-bottom:12px"><h3>Suas tiragens</h3></div><div class="panel history" id="hist"></div></div>`;
   const hist = () => { document.getElementById("hist").innerHTML = tiragens.length
-    ? tiragens.map(t=>`<div class="row"><time>${dataBR(t.created_at)}</time><div class="q">${esc(t.pergunta)}</div><span class="pill">${ARCANOS[t.carta][1]}${t.invertida?" · invertida":""}</span></div>`).join("")
+    ? tiragens.map(t=>`<div class="row"><img class="thumb ${t.invertida?"rev":""}" src="${cartaImg(t.carta)}" alt="" loading="lazy" width="350" height="600"><div class="q"><time>${dataBR(t.created_at)}</time><p>${esc(t.pergunta)}</p></div><span class="pill">${ARCANOS[t.carta][1]}${t.invertida?" · invertida":""}</span></div>`).join("")
     : `<p class="muted">Nenhuma tiragem ainda. Sua primeira pergunta aparecerá aqui.</p>`; };
   hist();
   document.getElementById("f-q").onsubmit = async e => {

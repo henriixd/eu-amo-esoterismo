@@ -104,7 +104,7 @@ main{padding-block:44px 80px;padding-left:max(24px,env(safe-area-inset-left,0px)
 .front.rev .glyph{transform:rotate(180deg)}
 .pill{display:inline-block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:500}
 .history{display:flex;flex-direction:column}
-.history .row{display:grid;grid-template-columns:110px 1fr auto;gap:16px;padding:14px 0;border-top:1px solid var(--line);align-items:baseline}
+.history .row{display:grid;grid-template-columns:44px 1fr auto;gap:16px;padding:14px 0;border-top:1px solid var(--line);align-items:baseline}
 .history .row:first-child{border-top:0}
 .history .q{min-width:0}
 .history time{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -156,7 +156,8 @@ dl.data dd{margin:0;min-width:0;overflow-wrap:anywhere}
   .reading{grid-template-columns:1fr}
   .forecast{grid-template-columns:1fr}
   .profile{grid-template-columns:1fr}
-  .history .row{grid-template-columns:1fr;gap:4px}
+  .history .row{grid-template-columns:44px 1fr;gap:4px 14px}
+  .history .row .pill{grid-column:2;justify-self:start}
   dl.data{grid-template-columns:1fr;gap:2px 0}
   dl.data dd{margin-bottom:10px}
 }
@@ -167,3 +168,10 @@ dl.data dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .notice{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:8px}
 .loading{display:grid;place-items:center;min-height:60vh;color:var(--muted);font-family:var(--display);font-size:1.2rem}
 .social a{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:5px 10px;text-decoration:none}
+.front.img{padding:0;border:0;box-shadow:0 10px 30px rgba(36,24,58,.25);overflow:hidden;background:var(--bg)}
+.front.img img{width:100%;height:100%;object-fit:cover;display:block}
+.front.img.rev img{transform:rotate(180deg)}
+.history .thumb{width:44px;height:auto;aspect-ratio:7/12;border-radius:4px;box-shadow:0 2px 6px rgba(36,24,58,.2);object-fit:cover}
+.history .thumb.rev{transform:rotate(180deg)}
+.history .q time{display:block}
+.history .row{align-items:center}
